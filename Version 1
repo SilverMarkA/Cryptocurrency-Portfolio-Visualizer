@@ -1,0 +1,60 @@
+import re
+from coinmarketcapapi import CoinMarketCapAPI, CoinMarketCapAPIError
+import matplotlib.pyplot as plt
+
+cmc = CoinMarketCapAPI('NOT MY API KEY')
+
+assets = ['BTC', 'ETH', 'LTC', 'XRP', 'ADA', 'USDT', 'BNB', 'DOT', 'LINK']
+amounts = [1, 32, 500, 10000, 10000, 1000, 800, 600, 600] #LOL, I wish I had a portfolio like this.
+prices = []
+values = []
+total = []
+
+for asset in assets:
+    data = cmc.cryptocurrency_info(symbol=asset)
+    # The CMC API gives information in one large literal. 
+    # This converts the literal to a string.
+    data = str(data)
+    # The CMC API gives the price in a sentence of the string with a comma denoting the thousands position. 
+    # This removes the commas.
+    data = data.replace(',', '')
+    # This finds the price, once the comma is removed. But the price becomes a list.
+    price = re.findall(r'is \d*\.?\d+', data)
+    # This re-converts the list back into a string.
+    price = str(price)
+    # These remove characters that are irrelevant for working with a float.
+    price = price.replace("['is ", '') 
+    price = price.replace("']", '')
+    price = float(price)
+    # We can now work with prices. I know this is not very clean, but I made this and I made it work. 
+    # I will keep learning and write better code.
+    prices.append(price)
+    index = assets.index(asset)
+    values.append(price * amounts[index])
+    total.append(sum(values))
+
+fig, ax = plt.subplots(figsize=(16, 8))
+
+ax.set_facecolor('black')
+ax.figure.set_facecolor('#121212')
+
+ax.tick_params(axis='x', color='white')
+ax.tick_params(axis='y', color='white')
+
+ax.set_title('Asset Visualizer', color='#F2D2BD', fontsize=20)
+
+_, texts, _ = ax.pie(total, labels=assets, autopct="%1.1f%%", pctdistance=0.8)
+[text.set_color('white')
+for text in texts]
+
+my_circle = plt.Circle((0, 0), 0.55, color='black')
+plt.gca().add_artist(my_circle)
+
+ax.text(-2, 1, 'Asset Overview', fontsize=14, color='#F2D2BD', verticalalignment='center', horizontalalignment='center')
+ax.text(-2, 0.85, f'Total USD Amount: ${sum(total):.2f}', fontsize=12, color='#F2D2BD', verticalalignment='center', horizontalalignment='center')
+counter = 0.15
+for asset in assets:
+    ax.text(-2, 0.85 - counter, f'{asset}: ${total[assets.index(asset)]:2f}', fontsize=12, color='#F2D2BD', verticalalignment='center', horizontalalignment='center')
+    counter += 0.15
+
+plt.show()
