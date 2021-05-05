@@ -23,11 +23,9 @@ for asset in assets:
     # This re-converts the list back into a string.
     price = str(price)
     # These remove characters that are irrelevant for working with a float.
-    price = price.replace("['is ", '') 
-    price = price.replace("']", '')
+    price = price.replace("['is ", '').replace("']", '')
     price = float(price)
-    # We can now work with prices. I know this is not very clean, but I made this and I made it work. 
-    # I will keep learning and write better code.
+    # We can now work with prices.
     prices.append(price)
     index = assets.index(asset)
     values.append(price * amounts[index])
