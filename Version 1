@@ -31,7 +31,7 @@ for asset in assets:
     values.append(price * amounts[index])
     total.append(sum(values))
 
-fig, ax = plt.subplots(figsize=(16, 8))
+fig, ax = plt.subplots(figsize=(8, 4))
 
 ax.set_facecolor('black')
 ax.figure.set_facecolor('#121212')
@@ -39,7 +39,7 @@ ax.figure.set_facecolor('#121212')
 ax.tick_params(axis='x', color='white')
 ax.tick_params(axis='y', color='white')
 
-ax.set_title('Asset Visualizer', color='#F2D2BD', fontsize=20)
+ax.set_title('Crypto Holdings', color='#F2D2BD', fontsize=20)
 
 _, texts, _ = ax.pie(total, labels=assets, autopct="%1.1f%%", pctdistance=0.8)
 [text.set_color('white')
@@ -48,11 +48,12 @@ for text in texts]
 my_circle = plt.Circle((0, 0), 0.55, color='black')
 plt.gca().add_artist(my_circle)
 
-ax.text(-2, 1, 'Asset Overview', fontsize=14, color='#F2D2BD', verticalalignment='center', horizontalalignment='center')
-ax.text(-2, 0.85, f'Total USD Amount: ${sum(total):.2f}', fontsize=12, color='#F2D2BD', verticalalignment='center', horizontalalignment='center')
+ax.text(-2.2, 1, 'Portfolio Overview', fontsize=14, color='#F2D2BD', verticalalignment='center', horizontalalignment='center')
+ax.text(-2.2, 0.85, f'Total USD Amount: ${sum(values):.2f}', fontsize=12, color='#F2D2BD', verticalalignment='center', horizontalalignment='center')
 counter = 0.15
+
 for asset in assets:
-    ax.text(-2, 0.85 - counter, f'{asset}: ${total[assets.index(asset)]:2f}', fontsize=12, color='#F2D2BD', verticalalignment='center', horizontalalignment='center')
+    ax.text(-2.2, 0.85 - counter, f'{asset}: ${values[assets.index(asset)]:2f}', fontsize=8, color='#F2D2BD', verticalalignment='center', horizontalalignment='center')
     counter += 0.15
 
 plt.show()
